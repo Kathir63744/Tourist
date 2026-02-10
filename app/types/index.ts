@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 // Booking Types
 export interface BookingData {
   resortId: string;
@@ -86,4 +88,17 @@ export interface EmailOptions {
   subject: string;
   template: 'booking-confirmation' | 'admin-notification' | 'cancellation';
   data: EmailTemplateData;
+}
+
+export interface BlogPost {
+  excerpt: ReactNode;
+  category: ReactNode;
+  readTime: ReactNode;
+  image: string | Blob | undefined;
+  id: string;
+  title: string;
+  author: string;
+  date: string;
+  content: string;
+  tags?: string[];
 }

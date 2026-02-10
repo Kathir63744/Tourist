@@ -44,15 +44,16 @@ export default function BlogCard({ post }: BlogCardProps) {
         </p>
         
         <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.slice(0, 3).map((tag, index) => (
-            <span 
-              key={index} 
-              className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
-            >
-              <Tag className="w-3 h-3" />
-              {tag}
-            </span>
-          ))}
+          {post.tags?.slice(0, 3).map((tag, index) => (
+  <span 
+    key={index} 
+    className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+  >
+    <Tag className="w-3 h-3" />
+    {tag}
+  </span>
+))}
+
         </div>
         
         <button className="text-teal-600 font-medium hover:text-teal-700 flex items-center gap-2">
