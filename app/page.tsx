@@ -515,72 +515,71 @@ export default function HomePage() {
     }, 100);
   };
 
-  // Handle direct book now
-  const handleBookNow = async (room: RoomDetails) => {
-    if (!isLoggedIn) {
-      toast.error("Please sign in to book a room");
-      router.push("/signin");
-      return;
-    }
+const handleBookNow = async (room: RoomDetails) => {
+  if (!isLoggedIn) {
+    toast.error("Please sign in to book a room");
+    router.push("/signin");
+    return;
+  }
+  
+  setSelectedRoom(room);
+  
+  try {
+    setBookingLoading(true);
     
-    setSelectedRoom(room);
-    calculatePrice();
-    
-    try {
-      setBookingLoading(true);
-      
-      const bookingPayload: BookingPayload = {
-        resortId: room.id.toString(),
-        resortName: room.name,
-        location: room.location,
-        basePrice: room.pricing.basePrice,
-        totalAmount: totalPrice,
-        rooms: 1,
+    // Prepare booking data
+    const bookingPayload = {
+      resortId: room.id.toString(),
+      resortName: room.name,
+      roomType: room.roomType,
+      location: room.location,
+      checkIn: new Date().toISOString().split('T')[0],
+      checkOut: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      guests: {
         adults: 2,
         children: 0,
-        nights: 1,
-        checkInDate: new Date().toISOString(),
-        checkOutDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        priceBreakdown: {
-          subtotal: room.pricing.basePrice,
-          discount: room.pricing.originalPrice - room.pricing.basePrice,
-          tax: (room.pricing.basePrice * room.pricing.taxPercentage) / 100,
-          total: room.pricing.basePrice + ((room.pricing.basePrice * room.pricing.taxPercentage) / 100)
-        },
-        roomType: room.roomType,
-        checkIn: new Date().toISOString().split('T')[0],
-        checkOut: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-        guests: 2,
-        customer: user ? {
-          name: user.name,
-          email: user.email,
-          phone: user.phone
-        } : undefined
-      };
+        rooms: 1
+      },
+      customer: {
+        name: user?.name || 'Guest',
+        email: user?.email || 'guest@example.com',
+        phone: user?.phone || 'Not provided'
+      },
+      basePrice: room.pricing.basePrice,
+      totalAmount: room.pricing.basePrice * 1.18 // Including tax
+    };
 
-      const result = await bookingAPI.createBooking(bookingPayload as any);
-
-      if (result.success) {
-        toast.success("Booking request submitted successfully!");
-        
-        if (result.data?.bookingReference) {
-          toast.success(`Booking Reference: ${result.data.bookingReference}`, {
-            duration: 6000,
-          });
-        }
-        
-        // Navigate to resort page
-        router.push(`/resorts?room=${room.id}`);
-      } else {
-        toast.error(result.error || "Booking failed");
-      }
-    } catch (error: any) {
-      console.error("Booking error:", error);
-      toast.error(error.message || "Failed to submit booking");
-    } finally {
-      setBookingLoading(false);
+    console.log('📤 Sending booking:', bookingPayload);
+    
+    const result = await bookingAPI.createBooking(bookingPayload as any);
+    
+    if (result.success) {
+      // Show success toasts
+      toast.success('🎉 Booking confirmed successfully!', {
+        duration: 5000,
+        icon: '✅'
+      });
+      
+      toast.success(`Reference: ${result.data?.bookingReference}`, {
+        duration: 8000,
+      });
+      
+      toast.success('📧 Check your email for confirmation', {
+        duration: 6000,
+      });
+      
+      // Reset state
+      setSelectedRoom(null);
+      setShowRoomDetails(false);
     }
-  };
+    
+  } catch (error: any) {
+    console.error("Booking error:", error);
+    toast.error('Booking failed. Please try again.');
+  } finally {
+    setBookingLoading(false);
+  }
+};
 
   // Handle detailed booking submission
   const handleDetailedBooking = async () => {
