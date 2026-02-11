@@ -45,3 +45,29 @@ body {
   font-family: var(--font-migra), serif;
 }
 
+/* Add to your global.css or component styles */
+#googleSignIn {
+  min-height: 40px;
+  min-width: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#googleSignIn > div {
+  width: 100% !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+}
+
+#googleSignIn iframe {
+  border-radius: 9999px !important;
+}
+
+/* Dark mode support for Google button */
+@media (prefers-color-scheme: dark) {
+  #googleSignIn > div {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
