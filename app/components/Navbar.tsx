@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LoginButton from "./LoginButton";
+import Image from "next/image";
 
 interface NavItem {
   id: number;
@@ -11,19 +12,22 @@ interface NavItem {
 
 interface NavbarProps {
   logoText?: string;
+  logoImage?: string; // URL or path to logo image
   navItems?: NavItem[];
   fixed?: boolean;
   initialTransparent?: boolean;
 }
 
 export default function TouristNavbar({
-  logoText = "Tourist Explorer",
+  logoText = "Valparai Helpline",
+  logoImage = "/valparai_logo_3.png", // Default logo path - change this to your actual logo path
   navItems = [
     { id: 1, label: "Home", href: "/" },
     { id: 2, label: "Destinations", href: "/resorts" },
-    { id: 3, label: "Blog", href: "/blog" },
-     { id: 4, label: "Gallery", href: "/gallery" },
-    { id: 5, label: "Contact", href: "/contact" },
+    { id: 3, label: "Packages", href: "/packages" },
+    { id: 4, label: "Blog", href: "/blog" },
+    { id: 5, label: "Gallery", href: "/gallery" },
+    { id: 6, label: "Contact", href: "/contact" },
   ],
   fixed = true,
   initialTransparent = true,
@@ -55,24 +59,33 @@ export default function TouristNavbar({
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-5 py-3">
 
-        {/* Logo */}
-        <a href="/" className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-teal-400 to-emerald-300 flex items-center justify-center text-sm font-bold text-black">
-            TE
-          </div>
-          <span className="text-sm md:text-base tracking-widest font-semibold text-white">
-            {logoText}
-          </span>
-        </a>
+        {/* Logo - Fixed width to prevent shifting */}
+        <div className="flex items-center gap-2 min-w-[140px]">
+          <a href="/" className="flex items-center gap-2">
+            {/* Logo Image Input */}
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-teal-400 to-emerald-300 flex items-center justify-center overflow-hidden">
+              <Image
+                src={logoImage}
+                alt="Logo"
+                width={36}
+                height={36}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <span className="text-sm md:text-base tracking-widest font-semibold text-white whitespace-nowrap">
+              {logoText}
+            </span>
+          </a>
+        </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-6 text-xs uppercase tracking-widest">
+        {/* Desktop Nav - Centered with flex-1 */}
+        <div className="hidden md:flex flex-1 items-center justify-center gap-6 text-xs uppercase tracking-widest">
           {navItems.map(item => (
             <a
               key={item.id}
               href={item.href}
               className={`
-                relative transition-all
+                relative transition-all whitespace-nowrap
                 ${
                   isActive(item.href)
                     ? "text-teal-300"
@@ -88,13 +101,13 @@ export default function TouristNavbar({
           ))}
         </div>
 
-        {/* Desktop CTA */}
-<div className="hidden md:flex items-center gap-3">
-  <LoginButton />
-  <button className="px-4 py-1.5 text-xs tracking-widest rounded-full bg-gradient-to-r from-teal-400 to-emerald-400 text-black font-semibold hover:scale-105 transition">
-    Book Now
-  </button>
-</div>
+        {/* Desktop CTA - Fixed width to prevent shifting */}
+        <div className="hidden md:flex items-center gap-2 min-w-[140px] justify-end">
+          <LoginButton />
+          <button className="px-3 py-1.5 text-[10px] tracking-widest rounded-full bg-gradient-to-r from-teal-400 to-emerald-400 text-black font-semibold hover:scale-105 transition whitespace-nowrap">
+            Book Now
+          </button>
+        </div>
 
         {/* Mobile Toggle */}
         <button

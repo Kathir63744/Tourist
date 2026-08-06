@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Providers from "./components/Providers";
+
 import "./globals.css";
+import TouristNavbar from "./components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,9 +48,9 @@ const migra = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "HillEscape - Luxury Hill Station Resorts",
+  title: "Valparai helpline",
   description:
-    "Experience world-class hospitality in our carefully curated resorts across Valparai, Solaiyur, and Kothagiri",
+    "Experience curated resorts across Valparai, Solaiyur, and Kothagiri",
 };
 
 export default function RootLayout({
@@ -64,7 +66,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* Add Navbar here with logo image */}
+          <TouristNavbar 
+            logoImage="/valparai_logo_3.png" // Replace with your actual logo path
+            logoText="Valparai Helpline"
+          />
+          {children}
+        </Providers>
       </body>
     </html>
   );

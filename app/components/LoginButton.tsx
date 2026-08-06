@@ -21,16 +21,13 @@ export default function LoginButton() {
 
   // ============= GOOGLE SIGN-IN INITIALIZATION =============
   useEffect(() => {
-    // Only run on client side and if not logged in
     if (typeof window === 'undefined' || isLoggedIn) return;
     
-    // Check if script already exists
     if (document.querySelector('script[src="https://accounts.google.com/gsi/client"]')) {
       initializeGoogleSignIn();
       return;
     }
     
-    // Create and load script
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
@@ -42,7 +39,6 @@ export default function LoginButton() {
     
     document.head.appendChild(script);
     
-    // Cleanup function
     return () => {
       const existingScript = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
       if (existingScript) {
@@ -75,24 +71,21 @@ export default function LoginButton() {
         ]
       });
       
-      // Render the button
+      // Render Google button with custom settings
       const buttonElement = document.getElementById('googleSignIn');
       if (buttonElement) {
         window.google.accounts.id.renderButton(
           buttonElement,
           { 
             theme: 'outline', 
-            size: 'large',
+            size: 'medium',
             text: 'signin_with',
             shape: 'pill',
-            width: 250,
+            width: 180,
             logo_alignment: 'left'
           }
         );
       }
-      
-      // Optional: Prompt one-tap sign-in
-      // window.google.accounts.id.prompt();
       
     } catch (error) {
       console.error('Google Sign-In initialization error:', error);
@@ -108,7 +101,6 @@ export default function LoginButton() {
         throw new Error('No credential received');
       }
 
-      // Decode the JWT token
       const userData = decodeJwtResponse(response.credential);
       
       const user = {
@@ -119,13 +111,16 @@ export default function LoginButton() {
         phone: ''
       };
       
-      // Login user
       login(user, response.credential);
       toast.success(`Welcome, ${user.name}!`);
       
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+      
     } catch (error) {
       console.error('Google login error:', error);
-      toast.error('Google login failed. Please try email login.');
+      toast.error('Google login failed. Please try again.');
     }
   };
 
@@ -167,6 +162,10 @@ export default function LoginButton() {
     
     login(user);
     toast.success(`Welcome, ${user.name}!`);
+    
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   };
 
   // ============= PROFILE EDIT =============
@@ -184,7 +183,6 @@ export default function LoginButton() {
 
   // ============= LOGOUT =============
   const handleLogout = () => {
-    // Clear Google session
     if (typeof window !== 'undefined' && window.google) {
       try {
         window.google.accounts.id.disableAutoSelect();
@@ -198,6 +196,10 @@ export default function LoginButton() {
     
     logout();
     setShowProfile(false);
+    
+    setTimeout(() => {
+      window.location.reload();
+    }, 300);
   };
 
   // ============= RENDER PROFILE =============
@@ -206,44 +208,44 @@ export default function LoginButton() {
       <div className="relative">
         <button
           onClick={() => setShowProfile(!showProfile)}
-          className="flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full hover:bg-white/30 transition-colors"
+          className="flex items-center gap-2 px-2.5 py-1.5 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-colors border border-white/10"
         >
           {user.picture ? (
             <img 
               src={user.picture} 
               alt={user.name} 
-              className="w-8 h-8 rounded-full border-2 border-teal-400"
+              className="w-6 h-6 rounded-full border border-teal-400"
             />
           ) : (
-            <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
-              <User className="w-5 h-5 text-white" />
+            <div className="w-6 h-6 bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full flex items-center justify-center">
+              <User className="w-3.5 h-3.5 text-black" />
             </div>
           )}
-          <span className="text-white font-medium hidden md:inline">
+          <span className="text-white text-xs font-medium hidden md:inline">
             {user.name?.split(' ')[0] || 'User'}
           </span>
         </button>
 
         {showProfile && (
-          <div className="absolute right-0 mt-2 w-80 bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-white/20 p-4 shadow-2xl z-50">
+          <div className="absolute right-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-white/10 p-4 shadow-2xl z-50">
             {/* Profile Header */}
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-3 pb-3 border-b border-white/10">
               {user.picture ? (
                 <img 
                   src={user.picture} 
                   alt={user.name} 
-                  className="w-12 h-12 rounded-full border-2 border-teal-400"
+                  className="w-10 h-10 rounded-full border-2 border-teal-400"
                 />
               ) : (
-                <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-black" />
                 </div>
               )}
-              <div className="flex-1">
-                <h4 className="font-bold text-white">{user.name}</h4>
-                <p className="text-white/80 text-sm break-all">{user.email}</p>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-bold text-white text-sm truncate">{user.name}</h4>
+                <p className="text-white/60 text-xs truncate">{user.email}</p>
                 {user.phone && (
-                  <p className="text-white/70 text-sm flex items-center gap-1 mt-1">
+                  <p className="text-white/50 text-xs flex items-center gap-1 mt-0.5">
                     <Phone className="w-3 h-3" /> {user.phone}
                   </p>
                 )}
@@ -252,45 +254,44 @@ export default function LoginButton() {
             
             {/* Edit Form */}
             {showEditForm ? (
-              <div className="mb-4 space-y-3">
+              <div className="mb-3 space-y-2">
                 <input
                   type="text"
                   value={editData.name}
                   onChange={(e) => setEditData({...editData, name: e.target.value})}
                   placeholder="Your name"
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-teal-500"
+                  className="w-full px-3 py-1.5 text-sm bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-teal-400"
                 />
                 <input
                   type="tel"
                   value={editData.phone}
                   onChange={(e) => setEditData({...editData, phone: e.target.value})}
                   placeholder="Phone number"
-                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-teal-500"
+                  className="w-full px-3 py-1.5 text-sm bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-teal-400"
                 />
                 <div className="flex gap-2">
                   <button
                     onClick={handleEditSubmit}
-                    className="flex-1 px-3 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
+                    className="flex-1 px-3 py-1.5 text-sm bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-lg hover:opacity-90 transition-colors"
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setShowEditForm(false)}
-                    className="px-3 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
+                    className="px-3 py-1.5 text-sm bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
                   >
                     Cancel
                   </button>
                 </div>
               </div>
             ) : (
-              /* Action Buttons */
-              <div className="space-y-1 mb-4">
+              <div className="space-y-1 mb-3">
                 <button 
                   onClick={() => {
                     setShowProfile(false);
                     router.push('/my-bookings');
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-1.5 text-sm text-white hover:bg-white/10 rounded-lg transition-colors"
                 >
                   <Calendar className="w-4 h-4" />
                   My Bookings
@@ -300,7 +301,7 @@ export default function LoginButton() {
                     setEditData({ name: user.name, phone: user.phone || '' });
                     setShowEditForm(true);
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-1.5 text-sm text-white hover:bg-white/10 rounded-lg transition-colors"
                 >
                   <User className="w-4 h-4" />
                   Edit Profile
@@ -309,10 +310,10 @@ export default function LoginButton() {
             )}
             
             {/* Logout Button */}
-            <div className="pt-4 border-t border-white/20">
+            <div className="pt-3 border-t border-white/10">
               <button 
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2 text-red-300 hover:bg-red-500/20 rounded-lg transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-3 py-1.5 text-sm text-red-300 hover:bg-red-500/20 rounded-lg transition-colors"
               >
                 <LogOut className="w-4 h-4" />
                 Sign Out
@@ -326,25 +327,21 @@ export default function LoginButton() {
 
   // ============= RENDER LOGIN BUTTONS =============
   return (
-    <div className="flex items-center gap-3">
-      {/* Google Sign In Button Container */}
+    <div className="flex items-center gap-2">
+      {/* Google Sign In Button Container - Clean & Compact */}
       <div 
         id="googleSignIn" 
-        className="min-w-[250px] min-h-[40px] flex items-center justify-center"
+        className="flex items-center justify-center"
+        style={{ 
+          minWidth: '120px', 
+          height: '32px'
+        }}
       ></div>
       
       {/* OR Divider */}
-      <span className="text-white/50 text-sm hidden sm:inline">or</span>
+      <span className="text-white/30 text-[10px] font-light hidden sm:inline">|</span>
       
-      {/* Email Login Fallback */}
-      <button
-        onClick={handleEmailLogin}
-        className="px-4 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-semibold rounded-full hover:from-teal-600 hover:to-emerald-600 transition-all flex items-center gap-2 shadow-lg hover:shadow-teal-500/30"
-      >
-        <Mail className="w-4 h-4" />
-        <span className="hidden sm:inline">Email Login</span>
-        <span className="sm:hidden">Email</span>
-      </button>
+
     </div>
   );
 }

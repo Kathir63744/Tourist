@@ -1,4 +1,23 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://tourist-back-1.onrender.com/api';
+// frontend/app/utils/api.ts
+//
+// FIXED:
+//  1. Base URL is normalised so NEXT_PUBLIC_API_URL works whether or not it
+//     ends in /api. Previously "http://localhost:5000" produced
+//     "http://localhost:5000/bookings" (missing /api) and 404'd.
+//  2. Booking failures are no longer masked with a fake success + fake
+//     reference. A failed booking now returns success:false so the UI can
+//     tell the user instead of silently losing the enquiry.
+
+const RAW_BASE =
+  process.env.NEXT_PUBLIC_API_URL || "https://tourist-back-1.onrender.com";
+
+// Strip trailing slashes and a trailing /api, then add exactly one /api.
+const API_BASE_URL =
+  RAW_BASE.replace(/\/+$/, "").replace(/\/api$/, "") + "/api";
+
+if (typeof window !== "undefined") {
+  console.log("🌐 API base:", API_BASE_URL);
+}
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -30,7 +49,6 @@ export interface BookingData {
   totalAmount: number;
 }
 
-// Define Resort interface
 export interface Resort {
   id: number;
   name: string;
@@ -57,137 +75,136 @@ export interface BookingResponse {
   bookingReference: string;
   message?: string;
   totalAmount?: number;
+  adminNotified?: boolean;
   [key: string]: any;
 }
 
-// Enhanced fetch with proper typing
 export async function fetchAPI<T = any>(
-  endpoint: string, 
+  endpoint: string,
   options: RequestInit = {},
   retries = 2
 ): Promise<ApiResponse<T>> {
   const url = `${API_BASE_URL}${endpoint}`;
-  
+
   const defaultOptions: RequestInit = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options.headers,
     },
     ...options,
   };
 
   try {
-    console.log(`🌐 API Call: ${endpoint}`);
-    
-    // Shorter timeout for better UX
+    console.log(`🌐 ${options.method || "GET"} ${url}`);
+
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-    
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
+
     const response = await fetch(url, {
       ...defaultOptions,
-      signal: controller.signal
+      signal: controller.signal,
     });
-    
+
     clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      // Special handling for booking endpoint - always return success
-      if (endpoint.includes('/bookings')) {
-        const fallbackData = {
-          bookingReference: `HILL${Date.now().toString().slice(-8)}`,
-          message: 'Booking received! Check your email.'
-        } as unknown as T;
-        
-        return {
-          success: true,
-          data: fallbackData
-        };
-      }
-      
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText}`);
+
+    // Read the body once, then decide.
+    const raw = await response.text();
+    let parsed: any = null;
+    try {
+      parsed = raw ? JSON.parse(raw) : null;
+    } catch {
+      parsed = null;
     }
-    
-    const data = await response.json();
-    return data as ApiResponse<T>;
-    
+
+    if (!response.ok) {
+      const message =
+        parsed?.message || parsed?.error || `HTTP ${response.status}`;
+      console.error(`❌ ${url} → ${response.status}: ${message}`);
+      return { success: false, error: message, message };
+    }
+
+    return (parsed ?? { success: true }) as ApiResponse<T>;
   } catch (error) {
-    console.error(`❌ API Error (${endpoint}):`, error);
-    
-    // Retry logic
-    if (retries > 0 && !endpoint.includes('/bookings')) {
-      console.log(`🔄 Retrying ${endpoint} (${retries} retries left)`);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    const isAbort = error instanceof Error && error.name === "AbortError";
+    const msg = isAbort
+      ? "The server took too long to respond."
+      : error instanceof Error
+      ? error.message
+      : "Network error";
+
+    console.error(`❌ API Error (${url}):`, msg);
+
+    // Retry transient network failures on GETs only. Never silently retry a
+    // POST — that risks creating two bookings.
+    const isWrite = (options.method || "GET").toUpperCase() !== "GET";
+    if (retries > 0 && !isWrite && !isAbort) {
+      console.log(`🔄 Retrying ${endpoint} (${retries} left)`);
+      await new Promise((r) => setTimeout(r, 1000));
       return fetchAPI<T>(endpoint, options, retries - 1);
     }
-    
-    // For bookings, always return success
-    if (endpoint.includes('/bookings')) {
-      const fallbackData = {
-        bookingReference: `HILL${Date.now().toString().slice(-8)}`,
-        message: 'Booking submitted successfully!'
-      } as unknown as T;
-      
+
+    // Resorts may fall back to local data — it's display-only, nothing is lost.
+    if (endpoint.includes("/resorts")) {
       return {
         success: true,
-        data: fallbackData
+        data: {
+          resorts: [],
+          count: 0,
+          message: "Using local data",
+        } as unknown as T,
       };
     }
-    
-    // For resorts, return typed fallback success
-    if (endpoint.includes('/resorts')) {
-      const fallbackData = {
-        resorts: [],
-        count: 0,
-        message: 'Using local data'
-      } as unknown as T;
-      
-      return {
-        success: true,
-        data: fallbackData
-      };
-    }
-    
+
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Network error',
-      message: 'Please check your connection'
+      error: msg,
+      message: "Couldn't reach the server. Please try again or call us.",
     };
   }
 }
 
-// API Functions with proper types
 export const bookingAPI = {
-  createBooking: async (bookingData: BookingData): Promise<ApiResponse<BookingResponse>> => {
-    console.log('📤 Creating booking for:', bookingData.resortName);
-    return fetchAPI<BookingResponse>('/bookings', {
-      method: 'POST',
+  createBooking: async (
+    bookingData: BookingData
+  ): Promise<ApiResponse<BookingResponse>> => {
+    console.log("📤 Creating booking for:", bookingData.resortName);
+    return fetchAPI<BookingResponse>("/bookings", {
+      method: "POST",
       body: JSON.stringify(bookingData),
     });
   },
 
-  checkAvailability: async (params: Record<string, any> = {}): Promise<ApiResponse<any>> => {
-    return fetchAPI('/bookings/check/availability');
-  },
+  checkAvailability: async (): Promise<ApiResponse<any>> =>
+    fetchAPI("/bookings/check/availability"),
+};
+
+export const contactAPI = {
+  submit: async (payload: {
+    name: string;
+    email: string;
+    phone?: string;
+    subject?: string;
+    message?: string;
+  }): Promise<ApiResponse<any>> =>
+    fetchAPI("/contact", { method: "POST", body: JSON.stringify(payload) }),
 };
 
 export const resortAPI = {
-  getAllResorts: async (filters: Record<string, any> = {}): Promise<ApiResponse<ResortsResponse>> => {
-    console.log('🏨 Fetching resorts');
-    
-    // Build query string
+  getAllResorts: async (
+    filters: Record<string, any> = {}
+  ): Promise<ApiResponse<ResortsResponse>> => {
     const queryParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
       if (value) queryParams.append(key, value.toString());
     });
-    
     const queryString = queryParams.toString();
-    const endpoint = queryString ? `/resorts?${queryString}` : '/resorts';
-    
-    return fetchAPI<ResortsResponse>(endpoint);
+    return fetchAPI<ResortsResponse>(
+      queryString ? `/resorts?${queryString}` : "/resorts"
+    );
   },
 
-  getResortById: async (resortId: string | number): Promise<ApiResponse<{ resort: Resort }>> => {
-    return fetchAPI(`/resorts/${resortId}`);
-  },
+  getResortById: async (
+    resortId: string | number
+  ): Promise<ApiResponse<{ resort: Resort }>> =>
+    fetchAPI(`/resorts/${resortId}`),
 };

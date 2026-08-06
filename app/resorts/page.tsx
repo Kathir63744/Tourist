@@ -575,69 +575,77 @@ const fetchResorts = async () => {
     setIsBookingModalOpen(true);
   };
 
+// Replace the existing handleBookingSubmit in app/resorts/page.tsx with this.
+//
+// The old version showed a success toast inside the catch block and in the
+// else branch, so a failed booking looked identical to a successful one.
+// Now failures are visible, and the customer is given the phone number.
+
 const handleBookingSubmit = async (bookingData: any) => {
   try {
     setBookingLoading(true);
-    
-    // Prepare data
+
     const completeBookingData = {
       ...bookingData,
-      resortId: selectedResort?.id?.toString() || '1',
-      resortName: selectedResort?.name || 'HillEscape Resort',
-      location: selectedResort?.location || 'Valparai',
+      resortId: selectedResort?.id?.toString() || "1",
+      resortName: selectedResort?.name || "HillEscape Resort",
+      location: selectedResort?.location || "Valparai",
       basePrice: selectedResort?.pricing.basePrice || 2603,
-      totalAmount: bookingData.totalAmount || bookingData.priceBreakdown?.totalAmount || 0,
-      roomType: selectedResort?.roomType || 'Deluxe Room',
-      customer: user ? {
-        name: user.name,
-        email: user.email,
-        phone: user.phone || bookingData.customer?.phone || ''
-      } : bookingData.customer
+      totalAmount:
+        bookingData.totalAmount ||
+        bookingData.priceBreakdown?.totalAmount ||
+        0,
+      roomType: selectedResort?.roomType || "Deluxe Room",
+      customer: {
+        // Form values win; fall back to the signed-in profile.
+        name: bookingData.customer?.name || user?.name || "",
+        email: bookingData.customer?.email || user?.email || "",
+        phone: bookingData.customer?.phone || user?.phone || "",
+        address: bookingData.customer?.address || "",
+        notes: bookingData.customer?.notes || "",
+      },
     };
 
-    console.log('📤 Sending booking:', completeBookingData);
+    console.log("📤 Sending booking:", completeBookingData);
 
     const result = await bookingAPI.createBooking(completeBookingData as any);
 
     if (result.success) {
-      // Show multiple toasts for better UX
-      toast.success(`✅ Booking submitted successfully!`, {
-        duration: 5000,
-      });
-      
-      toast.success(`📋 Reference: ${result.data?.bookingReference || 'Pending'}`, {
-        duration: 7000,
-      });
-      
-      toast.success(`📞 Our team will contact you within 2 hours`, {
+      toast.success("✅ Booking submitted successfully!", { duration: 5000 });
+
+      if (result.data?.bookingReference) {
+        toast.success(`📋 Reference: ${result.data.bookingReference}`, {
+          duration: 7000,
+        });
+      }
+
+      toast.success("📞 Our team will contact you within 2 hours", {
         duration: 6000,
       });
-      
-      // Close modals
+
+      // Warn if the server saved it but couldn't email the admin.
+      if (result.data?.adminNotified === false) {
+        console.warn("⚠️ Booking received but admin email failed to send");
+      }
+
       setIsBookingModalOpen(false);
       setSelectedResort(null);
       setShowRoomDetails(false);
-      
     } else {
-      // Even if API returns error, show booking was received
-      toast.success('📝 Booking request received! Our team will process it.', {
-        duration: 5000,
-      });
-      
-      setIsBookingModalOpen(false);
-      setSelectedResort(null);
+      // Real failure — say so instead of pretending it worked.
+      toast.error(
+        result.message ||
+          "Booking failed to send. Please call +91 90000 00000.",
+        { duration: 8000 }
+      );
+      console.error("Booking failed:", result.error);
     }
   } catch (error: any) {
     console.error("Booking error:", error);
-    
-    // Show success message anyway
-    toast.success('📝 Booking request noted! You will receive confirmation soon.', {
-      duration: 5000,
-    });
-    
-    setIsBookingModalOpen(false);
-    setSelectedResort(null);
-    setShowRoomDetails(false);
+    toast.error(
+      "Something went wrong sending your booking. Please call +91 90000 00000.",
+      { duration: 8000 }
+    );
   } finally {
     setBookingLoading(false);
   }
@@ -1709,4 +1717,4 @@ const handleBookingSubmit = async (bookingData: any) => {
       `}</style>
     </div>
   );
-}
+}//frontend/app/resorts/page.tsx

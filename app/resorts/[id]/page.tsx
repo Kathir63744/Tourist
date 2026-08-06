@@ -353,4 +353,4 @@ export default function ResortDetailPage() {
       </div>
     </div>
   );
-}
+}//frontend/app/resorts/page.tsx

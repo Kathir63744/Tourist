@@ -451,4 +451,4 @@ function getNearbyPlaces(lat: number, lng: number) {
       icon: "🛍️"
     }
   ];
-}
+}//frontend/app/components/EnhancedBookingForm.tsx

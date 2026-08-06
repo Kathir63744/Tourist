@@ -1,4 +1,4 @@
-// emailservice.ts - Updated with proper TypeScript typing
+// frontend/app/utils/emailservice.ts - Updated with proper TypeScript typing
 
 // Define interfaces for type safety
 interface BookingData {

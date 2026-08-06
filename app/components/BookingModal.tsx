@@ -684,4 +684,4 @@ export default function BookingModal({
       </Dialog>
     </Transition>
   );
-}
+}//frontend/app/components/BookingModal.tsx

@@ -567,4 +567,4 @@ const handleSubmit = async (e: React.FormEvent) => {
       </button>
     </form>
   );
-}
+}//frontend/app/components/BookingForm.tsx
