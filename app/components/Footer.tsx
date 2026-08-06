@@ -14,7 +14,7 @@ import {
 export default function TouristFooter() {
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     console.log("Newsletter subscription:", email);
     setEmail("");
