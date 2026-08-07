@@ -238,7 +238,8 @@ const WHY_US: string[] = [
   "Suitable for groups of 5 to 100+ guests",
 ];
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+const RAW_API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+const API = RAW_API.replace(/\/+$/, "").replace(/\/api$/, "");
 const MID_RATE = 0.6;
 const inr = (n: number): string => "\u20B9" + n.toLocaleString("en-IN");
 
@@ -717,7 +718,7 @@ function EnquiryForm({ quote }: { quote: Quote }) {
             type="tel"
             required
             inputMode="tel"
-            pattern="[0-9+\s\-]{10,15"
+            
             autoComplete="tel"
             placeholder="10-digit mobile number"
             className={`mt-1.5 ${fieldCls}`}
