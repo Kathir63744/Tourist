@@ -3,9 +3,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Providers from "./components/Providers";
-
-import "./globals.css";
 import TouristNavbar from "./components/Navbar";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,9 +47,28 @@ const migra = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Valparai helpline",
+  title: "Valparai Helpline",
   description:
     "Experience curated resorts across Valparai, Solaiyur, and Kothagiri",
+  icons: {
+    icon: [
+      {
+        url: "/valparai_logo_3.png?v=1", // Add version query string
+        sizes: "any",
+        type: "image/png",
+      },
+      {
+        url: "/favicon.ico?v=1", // Also try this if you have .ico
+        sizes: "any",
+        type: "image/x-icon",
+      },
+    ],
+    apple: [
+      {
+        url: "/valparai_logo_3.png?v=1",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -63,13 +81,33 @@ export default function RootLayout({
       lang="en"
       className={`${thunder.variable} ${migra.variable} ${monument.variable} ${chillout.variable} ${chrono.variable}`}
     >
+      <head>
+        {/* Add multiple favicon formats for better compatibility */}
+        <link 
+          rel="icon" 
+          href="/valparai_logo_3.png?v=1" 
+          type="image/png"
+        />
+        <link 
+          rel="shortcut icon" 
+          href="/valparai_logo_3.png?v=1" 
+          type="image/png"
+        />
+        <link 
+          rel="apple-touch-icon" 
+          href="/valparai_logo_3.png?v=1"
+        />
+        <link 
+          rel="apple-touch-icon-precomposed" 
+          href="/valparai_logo_3.png?v=1"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          {/* Add Navbar here with logo image */}
           <TouristNavbar 
-            logoImage="/valparai_logo_3.png" // Replace with your actual logo path
+            logoImage="/valparai_logo_3.png"
             logoText="Valparai Helpline"
           />
           {children}

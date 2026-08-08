@@ -1,8 +1,10 @@
+// app/components/Navbar.tsx
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import LoginButton from "./LoginButton";
 import Image from "next/image";
+import Link from "next/link";
 
 interface NavItem {
   id: number;
@@ -12,7 +14,7 @@ interface NavItem {
 
 interface NavbarProps {
   logoText?: string;
-  logoImage?: string; // URL or path to logo image
+  logoImage?: string;
   navItems?: NavItem[];
   fixed?: boolean;
   initialTransparent?: boolean;
@@ -20,7 +22,7 @@ interface NavbarProps {
 
 export default function TouristNavbar({
   logoText = "Valparai Helpline",
-  logoImage = "/valparai_logo_3.png", // Default logo path - change this to your actual logo path
+  logoImage = "/valparai_logo_3.png",
   navItems = [
     { id: 1, label: "Home", href: "/" },
     { id: 2, label: "Destinations", href: "/resorts" },
@@ -35,6 +37,7 @@ export default function TouristNavbar({
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTransparent, setIsTransparent] = useState(initialTransparent);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     if (!initialTransparent) return;
@@ -61,27 +64,34 @@ export default function TouristNavbar({
 
         {/* Logo - Fixed width to prevent shifting */}
         <div className="flex items-center gap-2 min-w-[140px]">
-          <a href="/" className="flex items-center gap-2">
-            {/* Logo Image Input */}
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-teal-400 to-emerald-300 flex items-center justify-center overflow-hidden">
-              <Image
-                src={logoImage}
-                alt="Logo"
-                width={36}
-                height={36}
-                className="object-cover w-full h-full"
-              />
+          <Link href="/" className="flex items-center gap-2 group">
+            {/* Logo Image */}
+            <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-gradient-to-tr from-teal-400 to-emerald-300 flex items-center justify-center overflow-hidden flex-shrink-0">
+              {!imageError ? (
+                <Image
+                  src={logoImage}
+                  alt="Valparai Helpline Logo"
+                  width={40}
+                  height={40}
+                  className="object-cover w-full h-full"
+                  priority
+                  onError={() => setImageError(true)}
+                />
+              ) : (
+                // Fallback if image fails to load
+                <span className="text-white font-bold text-xl">V</span>
+              )}
             </div>
             <span className="text-sm md:text-base tracking-widest font-semibold text-white whitespace-nowrap">
               {logoText}
             </span>
-          </a>
+          </Link>
         </div>
 
         {/* Desktop Nav - Centered with flex-1 */}
         <div className="hidden md:flex flex-1 items-center justify-center gap-6 text-xs uppercase tracking-widest">
           {navItems.map(item => (
-            <a
+            <Link
               key={item.id}
               href={item.href}
               className={`
@@ -97,7 +107,7 @@ export default function TouristNavbar({
               {isActive(item.href) && (
                 <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-teal-300" />
               )}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -111,8 +121,9 @@ export default function TouristNavbar({
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden text-white text-xl"
+          className="md:hidden text-white text-xl p-2 hover:bg-white/10 rounded-lg transition"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
         >
           {isMenuOpen ? "✕" : "☰"}
         </button>
@@ -129,7 +140,7 @@ export default function TouristNavbar({
       >
         <div className="flex flex-col gap-6 mt-24 px-8">
           {navItems.map(item => (
-            <a
+            <Link
               key={item.id}
               href={item.href}
               onClick={() => setIsMenuOpen(false)}
@@ -143,7 +154,7 @@ export default function TouristNavbar({
               `}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
 
           <div className="mt-6 space-y-3">
