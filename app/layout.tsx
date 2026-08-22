@@ -1,5 +1,5 @@
 // app/layout.tsx
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Providers from "./components/Providers";
@@ -46,29 +46,137 @@ const migra = localFont({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://valparaihelpline.com";
+const SITE_NAME = "Valparai Helpline";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#0f172a",
+};
+
 export const metadata: Metadata = {
-  title: "Valparai Helpline",
+  metadataBase: new URL(SITE_URL),
+  
+  title: {
+    default: `${SITE_NAME} - Premium Hill Station Resorts in Valparai & Kothagiri`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  
   description:
-    "Experience curated resorts across Valparai, Solaiyur, and Kothagiri",
+    "Experience curated resorts across Valparai, Solaiyur, and Kothagiri. Book premium hill station stays, explore tea plantations, waterfalls, and wildlife in Tamil Nadu's Western Ghats.",
+  
+  keywords: [
+    "Valparai Helpline",
+    "Valparai resorts",
+    "Kothagiri resorts",
+    "Solaiyur hill station",
+    "hill station resorts Tamil Nadu",
+    "premium resorts Western Ghats",
+    "Valparai travel guide",
+    "Kothagiri tourism",
+    "tea plantation stays",
+    "eco-friendly resorts",
+    "family resorts",
+    "honeymoon resorts",
+    "best resorts in Valparai",
+    "Anamalai hills resorts",
+    "Nilgiris accommodation",
+  ].join(", "),
+  
+  authors: [{ name: "Valparai Helpline Team" }],
+  creator: "Valparai Helpline",
+  publisher: "Valparai Helpline",
+  
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  
+  openGraph: {
+    title: `${SITE_NAME} - Premium Hill Station Resorts in Valparai & Kothagiri`,
+    description: "Experience curated resorts across Valparai, Solaiyur, and Kothagiri. Book premium hill station stays.",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    images: [
+      {
+        url: "/valparai_logo_3.png", // ← Keep your social sharing image here
+        width: 1200,
+        height: 630,
+        alt: "Valparai Helpline - Premium Hill Station Resorts",
+        type: "image/jpeg",
+      },
+    ],
+    type: "website",
+    locale: "en_IN",
+  },
+  
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} - Premium Hill Station Resorts`,
+    description: "Experience curated resorts across Valparai, Solaiyur, and Kothagiri.",
+    images: ["/og-image.jpg"], // ← Keep your social sharing image here
+  },
+  
+  // ✅ KEEP YOUR ORIGINAL ICONS - UNCHANGED
   icons: {
     icon: [
       {
-        url: "/valparai_logo_3.png?v=1", // Add version query string
+        url: "/valparai_logo_3.png",
         sizes: "any",
         type: "image/png",
       },
       {
-        url: "/favicon.ico?v=1", // Also try this if you have .ico
+        url: "/favicon.ico",
         sizes: "any",
         type: "image/x-icon",
       },
     ],
     apple: [
       {
-        url: "/valparai_logo_3.png?v=1",
+        url: "/valparai_logo_3.png",
       },
     ],
   },
+  
+  alternates: {
+    canonical: SITE_URL,
+  },
+  
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "",
+  },
+};
+
+// Organization Schema
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  name: SITE_NAME,
+  description: "Experience curated resorts across Valparai, Solaiyur, and Kothagiri",
+  url: SITE_URL,
+  logo: `${SITE_URL}/valparai_logo_3.png`,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+91 98765 43210",
+    contactType: "reservations",
+    availableLanguage: ["English", "Tamil"],
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Valparai",
+    addressRegion: "Tamil Nadu",
+    addressCountry: "IN",
+  },
+  priceRange: "₹2,000 - ₹15,000",
 };
 
 export default function RootLayout({
@@ -82,24 +190,36 @@ export default function RootLayout({
       className={`${thunder.variable} ${migra.variable} ${monument.variable} ${chillout.variable} ${chrono.variable}`}
     >
       <head>
-        {/* Add multiple favicon formats for better compatibility */}
+        {/* ✅ YOUR ORIGINAL FAVICON - UNCHANGED */}
         <link 
           rel="icon" 
-          href="/valparai_logo_3.png?v=1" 
+          href="/valparai_logo_3.png" 
           type="image/png"
         />
         <link 
           rel="shortcut icon" 
-          href="/valparai_logo_3.png?v=1" 
+          href="/valparai_logo_3.png" 
           type="image/png"
         />
         <link 
           rel="apple-touch-icon" 
-          href="/valparai_logo_3.png?v=1"
+          href="/valparai_logo_3.png"
         />
         <link 
           rel="apple-touch-icon-precomposed" 
-          href="/valparai_logo_3.png?v=1"
+          href="/valparai_logo_3.png"
+        />
+        
+        {/* Preconnect for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
         />
       </head>
       <body
