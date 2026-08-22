@@ -108,11 +108,11 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     images: [
       {
-        url: "/valparai_logo_3.png", // ← Keep your social sharing image here
+        url: "/valparai_logo_3.png", // ✅ Now using same image for both
         width: 1200,
         height: 630,
         alt: "Valparai Helpline - Premium Hill Station Resorts",
-        type: "image/jpeg",
+        type: "image/png",
       },
     ],
     type: "website",
@@ -123,10 +123,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME} - Premium Hill Station Resorts`,
     description: "Experience curated resorts across Valparai, Solaiyur, and Kothagiri.",
-    images: ["/og-image.jpg"], // ← Keep your social sharing image here
+    images: ["/valparai_logo_3.png"], // ✅ Now using same image as Open Graph
   },
   
-  // ✅ KEEP YOUR ORIGINAL ICONS - UNCHANGED
   icons: {
     icon: [
       {
@@ -190,7 +189,6 @@ export default function RootLayout({
       className={`${thunder.variable} ${migra.variable} ${monument.variable} ${chillout.variable} ${chrono.variable}`}
     >
       <head>
-        {/* ✅ YOUR ORIGINAL FAVICON - UNCHANGED */}
         <link 
           rel="icon" 
           href="/valparai_logo_3.png" 
@@ -210,11 +208,9 @@ export default function RootLayout({
           href="/valparai_logo_3.png"
         />
         
-        {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
