@@ -85,9 +85,9 @@ export const metadata: Metadata = {
     "Nilgiris accommodation",
   ].join(", "),
   
-  authors: [{ name: "Valparai Helpline Team" }],
-  creator: "Valparai Helpline",
-  publisher: "Valparai Helpline",
+  authors: [{ name: "Zoy Tours Team" }],
+  creator: "Zoy Tours",
+  publisher: "Zoy Tours",
   
   robots: {
     index: true,
