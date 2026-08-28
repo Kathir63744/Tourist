@@ -24,6 +24,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import TouristFooter from "../components/Footer";
+import { Mountain } from "lucide-react";
 
 /* ── DATA ──────────────────────────────────────────────────────────────── */
 
@@ -870,10 +871,7 @@ export default function PackagesClient() {
 
       {/* HERO */}
       <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-3 py-1 text-xs text-white/80 backdrop-blur-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#E0A526]" />
-          Official tour partner
-        </div>
+
 
         <p className="mt-6 text-3xl font-bold uppercase tracking-[0.2em] text-[#E0A526] sm:text-4xl">
           {PARTNER.name}
@@ -1151,7 +1149,30 @@ export default function PackagesClient() {
         </div>
       </section>
 
-      <TouristFooter />
+          {/* Footer */}
+        <footer className="py-12 border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="text-center md:text-left">
+                <div className="flex items-center gap-2 mb-2">
+                  <Mountain className="w-6 h-6 text-teal-400" />
+                  <span className="text-xl font-bold text-white">Zoy Tours</span>
+                </div>
+                <p className="text-white/70 text-sm">Luxury hill station experiences redefined</p>
+              </div>
+              
+              <div className="flex items-center gap-6">
+                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Privacy Policy</a>
+                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Terms of Service</a>
+                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Contact Us</a>
+              </div>
+              
+              <div className="text-white/70 text-sm">
+                 Designed By Blackstone informatics
+              </div>
+            </div>
+          </div>
+        </footer>
     </main>
   );
 }

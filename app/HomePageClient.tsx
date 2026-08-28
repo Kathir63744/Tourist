@@ -1206,21 +1206,7 @@ const handleBookNow = async (room: RoomDetails) => {
   </div>
 </section>
 
-        {/* Weather Widget */}
-        <div className="fixed bottom-6 right-6 z-50">
-          <Card className="p-4" hover={false}>
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-linear-to-br from-teal-500/40 to-emerald-500/40 backdrop-blur-sm rounded-xl">
-                <Cloud className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-white text-sm font-medium">Current Weather</p>
-                <p className="text-2xl font-bold text-white">{weatherData.temp}</p>
-                <p className="text-white/90 text-xs">{weatherData.condition}</p>
-              </div>
-            </div>
-          </Card>
-        </div>
+
 
         {/* Footer */}
         <footer className="py-12 border-t border-white/10">
@@ -1229,7 +1215,7 @@ const handleBookNow = async (room: RoomDetails) => {
               <div className="text-center md:text-left">
                 <div className="flex items-center gap-2 mb-2">
                   <Mountain className="w-6 h-6 text-teal-400" />
-                  <span className="text-xl font-bold text-white">HillEscape</span>
+                  <span className="text-xl font-bold text-white">Zoy Tours</span>
                 </div>
                 <p className="text-white/70 text-sm">Luxury hill station experiences redefined</p>
               </div>
@@ -1241,7 +1227,7 @@ const handleBookNow = async (room: RoomDetails) => {
               </div>
               
               <div className="text-white/70 text-sm">
-                © {new Date().getFullYear()} HillEscape. All rights reserved.
+                 Designed By Blackstone informatics
               </div>
             </div>
           </div>

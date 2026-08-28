@@ -55,7 +55,7 @@ export default function Herobanner() {
             animate-fadeInleft
           "
         >
-          Valparai Helpline
+          Zoy Tours
         </h1>
         
         <p className="

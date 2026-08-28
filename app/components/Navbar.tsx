@@ -22,7 +22,7 @@ interface NavbarProps {
 
 export default function TouristNavbar({
   logoText = "Valparai Helpline",
-  logoImage = "/valparai_logo_3.png",
+  logoImage = "/zoy_tours_whatsapp_dp.png",
   navItems = [
     { id: 1, label: "Home", href: "/" },
     { id: 2, label: "Destinations", href: "/resorts" },

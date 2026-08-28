@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import TouristNavbar from "../components/Navbar";
-import { FiMapPin, FiChevronRight, FiZoomIn, FiX } from "react-icons/fi";
+import { FiMapPin, FiChevronRight, FiZoomIn, FiX, FiArrowLeft } from "react-icons/fi";
+import { Mountain } from "lucide-react";
 
 interface GalleryImage {
   id: number;
@@ -217,42 +218,78 @@ export default function GallerySection() {
     },
   ];
 
-
-// Inside your component, add this after your existing useEffects
-useEffect(() => {
-  if (images.length > 0) {
-    const imageItems = images.map((image) => ({
-      '@type': 'ImageObject',
-      contentUrl: image.src,
-      name: image.alt,
-      description: image.description,
-      caption: `${image.alt} - ${image.location}`,
-      thumbnailUrl: image.src,
-      location: {
-        '@type': 'Place',
-        name: image.location,
-      },
-    }));
-
-    const imageGallerySchema = {
-      '@context': 'https://schema.org',
-      '@type': 'ImageGallery',
-      name: `${getActiveTab()?.label || 'Gallery'} - HillEscape`,
-      description: `Beautiful ${getActiveTab()?.label || 'gallery'} images from HillEscape resorts`,
-      image: imageItems,
+  // Handle Escape key and Back button
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && selectedImage) {
+        setSelectedImage(null);
+      }
     };
 
- let scriptTag = document.getElementById('gallery-jsonld') as HTMLScriptElement | null;
-if (!scriptTag) {
-  scriptTag = document.createElement('script');
-  scriptTag.id = 'gallery-jsonld';
-  scriptTag.type = 'application/ld+json';
-  document.head.appendChild(scriptTag);
-}
-scriptTag.textContent = JSON.stringify(imageGallerySchema);
-    scriptTag.textContent = JSON.stringify(imageGallerySchema);
-  }
-}, [images, activeTab]);
+    // Handle popstate (browser back button)
+    const handlePopState = () => {
+      if (selectedImage) {
+        setSelectedImage(null);
+        // Push a new state to prevent immediate back navigation
+        window.history.pushState(null, '', window.location.href);
+      }
+    };
+
+    if (selectedImage) {
+      // Add event listeners
+      document.addEventListener("keydown", handleKeyDown);
+      window.addEventListener("popstate", handlePopState);
+      
+      // Push state to enable back button detection
+      window.history.pushState({ modalOpen: true }, '', window.location.href);
+      
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("popstate", handlePopState);
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedImage]);
+
+  // Schema.org JSON-LD for gallery
+  useEffect(() => {
+    if (images.length > 0) {
+      const imageItems = images.map((image) => ({
+        '@type': 'ImageObject',
+        contentUrl: image.src,
+        name: image.alt,
+        description: image.description,
+        caption: `${image.alt} - ${image.location}`,
+        thumbnailUrl: image.src,
+        location: {
+          '@type': 'Place',
+          name: image.location,
+        },
+      }));
+
+      const imageGallerySchema = {
+        '@context': 'https://schema.org',
+        '@type': 'ImageGallery',
+        name: `${getActiveTab()?.label || 'Gallery'} - HillEscape`,
+        description: `Beautiful ${getActiveTab()?.label || 'gallery'} images from HillEscape resorts`,
+        image: imageItems,
+      };
+
+      let scriptTag = document.getElementById('gallery-jsonld') as HTMLScriptElement | null;
+      if (!scriptTag) {
+        scriptTag = document.createElement('script');
+        scriptTag.id = 'gallery-jsonld';
+        scriptTag.type = 'application/ld+json';
+        document.head.appendChild(scriptTag);
+      }
+      scriptTag.textContent = JSON.stringify(imageGallerySchema);
+    }
+  }, [images, activeTab]);
 
   useEffect(() => {
     setLoading(true);
@@ -267,22 +304,37 @@ scriptTag.textContent = JSON.stringify(imageGallerySchema);
 
   const getActiveTab = () => tabs.find(tab => tab.id === activeTab);
 
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
+
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Background Image Overlay */}
+      {/* Background Image - Full Screen with Overlays */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90 z-10" />
-        <Image
-          src="/ba.jpg"
-          alt="Gallery Background"
-          fill
-          className="object-cover opacity-30"
-          priority
-          quality={100}
-        />
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-teal-900/10 via-transparent to-emerald-900/10 animate-pulse" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-black/20 to-black/60" />
+        {/* Primary Background Image */}
+        <div className="relative w-full h-full">
+          <Image
+            src="/ba.jpg"
+            alt="Gallery Background - HillEscape Resort"
+            fill
+            className="object-cover"
+            priority
+            quality={100}
+          />
+          
+          {/* Multiple Overlay Layers for Depth */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10" />
+          
+          {/* Animated gradient overlay for dynamic feel */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-teal-900/20 via-transparent to-emerald-900/20 animate-pulse z-10" />
+          
+          {/* Radial gradient for vignette effect */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_rgba(0,0,0,0.6)_100%)] z-10" />
+          
+          {/* Subtle pattern overlay for texture */}
+          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 z-10" />
+        </div>
       </div>
 
       <div className="relative z-10">
@@ -292,8 +344,10 @@ scriptTag.textContent = JSON.stringify(imageGallerySchema);
           <div className="max-w-7xl mx-auto">
             {/* Hero Header with Parallax Effect */}
             <div className="text-center mb-16 relative">
-              <div className="absolute -top-10 -left-10 w-20 h-20 bg-teal-500/10 rounded-full blur-xl" />
-              <div className="absolute -top-5 -right-10 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl" />
+              {/* Decorative Glow Effects */}
+              <div className="absolute -top-10 -left-10 w-20 h-20 bg-teal-500/20 rounded-full blur-xl animate-pulse" />
+              <div className="absolute -top-5 -right-10 w-32 h-32 bg-emerald-500/20 rounded-full blur-xl animate-pulse delay-1000" />
+              <div className="absolute top-20 left-1/2 -translate-x-1/2 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl" />
               
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
                 <span className="bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
@@ -301,12 +355,12 @@ scriptTag.textContent = JSON.stringify(imageGallerySchema);
                 </span>
               </h1>
               
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed drop-shadow-lg">
                 Immerse yourself in the breathtaking beauty of HillEscape. 
                 Explore our stunning properties and the natural wonders that surround them.
               </p>
               
-              <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500/20 to-emerald-500/20 backdrop-blur-sm rounded-full border border-teal-500/30">
+              <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-500/20 to-emerald-500/20 backdrop-blur-sm rounded-full border border-teal-500/30 shadow-lg shadow-black/20">
                 <FiMapPin className="text-teal-400" />
                 <span className="text-teal-300 font-medium">
                   Currently viewing: {getActiveTab()?.label}
@@ -323,10 +377,10 @@ scriptTag.textContent = JSON.stringify(imageGallerySchema);
                     onClick={() => setActiveTab(tab.id)}
                     className={`
                       group relative px-6 py-4 rounded-xl transition-all duration-300
-                      flex flex-col items-center border-2
+                      flex flex-col items-center border-2 backdrop-blur-sm
                       ${activeTab === tab.id
-                        ? "border-teal-500 bg-gradient-to-r from-teal-500/20 to-emerald-500/20 backdrop-blur-sm"
-                        : "border-gray-700 bg-gray-900/50 backdrop-blur-sm hover:border-teal-400/50"
+                        ? "border-teal-500 bg-gradient-to-r from-teal-500/30 to-emerald-500/30 shadow-lg shadow-teal-500/10"
+                        : "border-gray-700 bg-gray-900/40 hover:border-teal-400/50 hover:bg-gray-900/60"
                       }
                       min-w-[180px]
                     `}
@@ -450,128 +504,106 @@ scriptTag.textContent = JSON.stringify(imageGallerySchema);
               </div>
             )}
 
-            {/* Image Modal */}
+            {/* Image Modal with Enhanced Close Controls */}
             {selectedImage && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
-                <div className="relative w-full max-w-6xl max-h-[90vh]">
-                  <button
-                    onClick={() => setSelectedImage(null)}
-                    className="absolute -top-12 right-0 text-white hover:text-teal-400 text-2xl z-10"
+              <>
+                {/* Backdrop with click-to-close */}
+                <div 
+                  className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+                  onClick={closeModal}
+                >
+                  {/* Modal Container - prevents click propagation */}
+                  <div 
+                    className="relative w-full max-w-6xl max-h-[90vh]"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <FiX />
-                  </button>
-                  <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden">
-                    <Image
-                      src={selectedImage.src}
-                      alt={selectedImage.alt}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <div className="mt-4 p-6 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-sm rounded-xl border border-gray-700">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div>
-                        <h3 className="text-2xl font-bold text-white mb-2">{selectedImage.alt}</h3>
-                        <div className="flex items-center gap-4 mb-2">
-                          <div className="flex items-center gap-2">
-                            <FiMapPin className="text-teal-400" />
-                            <span className="text-teal-300">{selectedImage.location}</span>
+                    {/* Close Button - Top Right */}
+                    <button
+                      onClick={closeModal}
+                      className="absolute -top-14 right-0 text-white hover:text-teal-400 transition-colors duration-300 z-10 flex items-center gap-2 text-sm bg-black/50 px-4 py-2 rounded-full hover:bg-black/70"
+                      aria-label="Close modal"
+                    >
+                      <FiX className="text-xl" />
+                      <span>Close</span>
+                    </button>
+
+                    {/* Back Button - Top Left (Mobile Friendly) */}
+                    <button
+                      onClick={closeModal}
+                      className="absolute -top-14 left-0 text-white hover:text-teal-400 transition-colors duration-300 z-10 flex items-center gap-2 text-sm bg-black/50 px-4 py-2 rounded-full hover:bg-black/70 md:hidden"
+                      aria-label="Go back"
+                    >
+                      <FiArrowLeft className="text-xl" />
+                      <span>Back</span>
+                    </button>
+
+                    {/* Image Container */}
+                    <div className="relative w-full h-[80vh] rounded-2xl overflow-hidden bg-black/50">
+                      <Image
+                        src={selectedImage.src}
+                        alt={selectedImage.alt}
+                        fill
+                        className="object-contain"
+                        priority
+                      />
+                    </div>
+
+                    {/* Image Details */}
+                    <div className="mt-4 p-6 bg-gradient-to-r from-gray-900/80 to-black/80 backdrop-blur-sm rounded-xl border border-gray-700">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                          <h3 className="text-2xl font-bold text-white mb-2">{selectedImage.alt}</h3>
+                          <div className="flex items-center gap-4 mb-2">
+                            <div className="flex items-center gap-2">
+                              <FiMapPin className="text-teal-400" />
+                              <span className="text-teal-300">{selectedImage.location}</span>
+                            </div>
+                            <span className="px-3 py-1 bg-teal-500/20 text-teal-300 rounded-full text-sm">
+                              {selectedImage.category}
+                            </span>
                           </div>
-                          <span className="px-3 py-1 bg-teal-500/20 text-teal-300 rounded-full text-sm">
-                            {selectedImage.category}
-                          </span>
+                          <p className="text-gray-300">{selectedImage.description}</p>
                         </div>
-                        <p className="text-gray-300">{selectedImage.description}</p>
+                        <button className="px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-bold rounded-full hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 whitespace-nowrap">
+                          Book This Location
+                        </button>
                       </div>
-                      <button className="px-6 py-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-bold rounded-full hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 whitespace-nowrap">
-                        Book This Location
-                      </button>
+                    </div>
+
+                    {/* Keyboard shortcut hint */}
+                    <div className="absolute bottom-24 right-4 text-gray-500 text-xs hidden md:block bg-black/50 px-3 py-1 rounded-full">
+                      Press ESC to close
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
-
-            {/* Stats Section */}
-            <div className="mt-20 grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="group p-6 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 hover:border-teal-500/30 transition-all duration-300">
-                <div className="text-4xl font-bold bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-2">
-                  {allImages.length}+
-                </div>
-                <div className="text-gray-300 mb-2">Total Images</div>
-                <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-r from-teal-500 to-emerald-500"></div>
-                </div>
-              </div>
-              
-              <div className="group p-6 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 hover:border-teal-500/30 transition-all duration-300">
-                <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
-                  {tabs.length}
-                </div>
-                <div className="text-gray-300 mb-2">Exotic Locations</div>
-                <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                  <div className="w-2/3 h-full bg-gradient-to-r from-cyan-500 to-blue-500"></div>
-                </div>
-              </div>
-              
-              <div className="group p-6 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 hover:border-teal-500/30 transition-all duration-300">
-                <div className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent mb-2">
-                  360°
-                </div>
-                <div className="text-gray-300 mb-2">Panoramic Views</div>
-                <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                  <div className="w-3/4 h-full bg-gradient-to-r from-emerald-500 to-green-500"></div>
-                </div>
-              </div>
-              
-              <div className="group p-6 bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 hover:border-teal-500/30 transition-all duration-300">
-                <div className="text-4xl font-bold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                  4K
-                </div>
-                <div className="text-gray-300 mb-2">HD Quality</div>
-                <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-                  <div className="w-4/5 h-full bg-gradient-to-r from-violet-500 to-purple-500"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Call to Action */}
-            <div className="text-center mt-20 relative">
-              <div className="absolute -top-20 -left-20 w-40 h-40 bg-teal-500/5 rounded-full blur-3xl" />
-              <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-emerald-500/5 rounded-full blur-3xl" />
-              
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                Ready to Experience These Views?
-              </h2>
-              <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-                Don't just admire these breathtaking scenes in photos. 
-                Book your stay at HillEscape and wake up to these magical views every morning.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="px-8 py-4 bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-bold rounded-full hover:shadow-2xl hover:shadow-teal-500/30 hover:scale-105 transition-all duration-300 flex items-center gap-2 justify-center">
-                  Book Your Stay Now
-                  <FiChevronRight className="text-lg" />
-                </button>
-                <button className="px-8 py-4 bg-gray-900/50 backdrop-blur-sm text-white font-bold rounded-full border border-gray-700 hover:border-teal-500/50 hover:scale-105 transition-all duration-300">
-                  View All Packages
-                </button>
-              </div>
-              <p className="text-gray-500 mt-6 text-sm">
-                Limited availability. Book now to secure your preferred dates.
-              </p>
-            </div>
           </div>
         </section>
-
-        {/* Floating Navigation */}
-        <div className="fixed bottom-8 right-8 z-20 flex flex-col gap-2">
-          <button 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white flex items-center justify-center hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300"
-          >
-            ↑
-          </button>
-        </div>
+              {/* Footer */}
+        <footer className="py-12 border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="text-center md:text-left">
+                <div className="flex items-center gap-2 mb-2">
+                  <Mountain className="w-6 h-6 text-teal-400" />
+                  <span className="text-xl font-bold text-white">Zoy Tours</span>
+                </div>
+                <p className="text-white/70 text-sm">Luxury hill station experiences redefined</p>
+              </div>
+              
+              <div className="flex items-center gap-6">
+                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Privacy Policy</a>
+                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Terms of Service</a>
+                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Contact Us</a>
+              </div>
+              
+              <div className="text-white/70 text-sm">
+                 Designed By Blackstone informatics
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
 
       {/* Global Styles */}

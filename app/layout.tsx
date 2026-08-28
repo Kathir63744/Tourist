@@ -191,21 +191,21 @@ export default function RootLayout({
       <head>
         <link 
           rel="icon" 
-          href="/valparai_logo_3.png" 
+          href="/zoy_tours_whatsapp_dp.png" 
           type="image/png"
         />
         <link 
           rel="shortcut icon" 
-          href="/valparai_logo_3.png" 
+          href="/zoy_tours_whatsapp_dp.png" 
           type="image/png"
         />
         <link 
           rel="apple-touch-icon" 
-          href="/valparai_logo_3.png"
+          href="/zoy_tours_whatsapp_dp.png"
         />
         <link 
           rel="apple-touch-icon-precomposed" 
-          href="/valparai_logo_3.png"
+          href="/zoy_tours_whatsapp_dp.png"
         />
         
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -223,8 +223,8 @@ export default function RootLayout({
       >
         <Providers>
           <TouristNavbar 
-            logoImage="/valparai_logo_3.png"
-            logoText="Valparai Helpline"
+            logoImage="/zoy_tours_whatsapp_dp.png"
+            logoText="Zoy Tours"
           />
           {children}
         </Providers>
