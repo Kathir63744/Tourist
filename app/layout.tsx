@@ -46,8 +46,8 @@ const migra = localFont({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://valparaihelpline.com";
-const SITE_NAME = "Valparai Helpline";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://zoytours.com";
+const SITE_NAME = "Zoy Tours";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -111,7 +111,7 @@ export const metadata: Metadata = {
         url: "/valparai_logo_3.png", // ✅ Now using same image for both
         width: 1200,
         height: 630,
-        alt: "Valparai Helpline - Premium Hill Station Resorts",
+        alt: "Zoy Tours - Premium Hill Station Resorts",
         type: "image/png",
       },
     ],

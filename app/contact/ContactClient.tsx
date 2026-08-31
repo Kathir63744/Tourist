@@ -324,30 +324,38 @@ export default function ContactPage() {
             </div>
           </div>
         </section>
-                      {/* Footer */}
-        <footer className="py-12 border-t border-white/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="text-center md:text-left">
-                <div className="flex items-center gap-2 mb-2">
-                  <Mountain className="w-6 h-6 text-teal-400" />
-                  <span className="text-xl font-bold text-white">Zoy Tours</span>
-                </div>
-                <p className="text-white/70 text-sm">Luxury hill station experiences redefined</p>
-              </div>
-              
-              <div className="flex items-center gap-6">
-                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Privacy Policy</a>
-                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Terms of Service</a>
-                <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Contact Us</a>
-              </div>
-              
-              <div className="text-white/70 text-sm">
-                 Designed By Blackstone informatics
-              </div>
-            </div>
-          </div>
-        </footer>
+{/* Footer */}
+<footer className="py-12 border-t border-white/10">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="text-center md:text-left">
+        <div className="flex items-center gap-2 mb-2">
+          <Mountain className="w-6 h-6 text-teal-400" />
+          <span className="text-xl font-bold text-white">Zoy Tours</span>
+        </div>
+        <p className="text-white/70 text-sm">Luxury hill station experiences redefined</p>
+      </div>
+      
+      <div className="flex items-center gap-6">
+        <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Privacy Policy</a>
+        <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Terms of Service</a>
+        <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Contact Us</a>
+      </div>
+      
+      <div className="text-white/70 text-sm">
+        Designed By{" "}
+        <a 
+          href="https://blackstoneinfomatics.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-teal-400 hover:text-teal-300 transition-colors font-medium"
+        >
+          Blackstone Infomatics
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
       </div>
 
       {/* Custom Styles */}
