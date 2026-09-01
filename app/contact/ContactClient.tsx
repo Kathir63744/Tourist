@@ -26,7 +26,7 @@ export default function ContactPage() {
   const locationMaps = [
     {
       id: 1,
-      name: "Valparai-Solaiyur",
+      name: "Valparai-Sholayar",
       address: "Valparai Hills, Tamil Nadu 642127",
       coordinates: "10.3266° N, 76.9510° E",
       mapLink: "https://maps.app.goo.gl/Mx8bbPRbTePoL6Nx5",

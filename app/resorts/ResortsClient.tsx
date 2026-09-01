@@ -164,7 +164,7 @@ const fallbackResorts: RoomDetails[] = [
   {
     id: 1,
     name: "Deluxe Family Room",
-    location: "Valparai-Solaiyur",
+    location: "Valparai-Sholayar",
     description: "Our Deluxe Family Room offers spacious and comfortable accommodations perfect for families.",
     detailedDescription: "Our Deluxe Family Room offers spacious and comfortable accommodations perfect for families. It features a cozy seating area, a large bed, modern amenities, and a private bathroom. With stylish furnishings and ample space, it ensures a relaxing and enjoyable stay for all guests.",
     amenities: ["Double Bed", "Max 5 adults", "Fan", "Bathroom", "Bed Linen", "Dining table", "Mineral Water", "Bath or Shower", "Flat-screen TV", "Mountain View", "Spa", "Infinity Pool", "WiFi", "Restaurant", "Gym"],
@@ -184,7 +184,7 @@ const fallbackResorts: RoomDetails[] = [
   {
     id: 2,
     name: "Deluxe Family Room (With Balcony)",
-    location: "Valparai-Solaiyur",
+    location: "Valparai-Sholayar",
     description: "Our Deluxe Family Room with Balcony offers a spacious and comfortable retreat for families.",
     detailedDescription: "Our Deluxe Family Room with Balcony offers a spacious and comfortable retreat for families. It features a cozy seating area, a large bed, modern amenities, and a private bathroom. The added balcony provides a perfect space to relax and enjoy the views, making your stay even more memorable.",
     amenities: ["Double Bed", "Max 5 adults", "Bathroom", "Open Balcony", "Forest View", "Campfire", "Trekking", "Bird Watching", "Eco-friendly"],
@@ -283,7 +283,7 @@ const fallbackResorts: RoomDetails[] = [
   },
 ];
 
-const locations = ["All", "Valparai-Solaiyur", "Kothagiri"];
+const locations = ["All", "Valparai-Sholayar", "Kothagiri"];
 const priceRanges = [
   { label: "All Prices", min: 0, max: Infinity },
   { label: "₹2,000 - ₹3,500", min: 2000, max: 3500 },
@@ -967,7 +967,7 @@ const handleBookingSubmit = async (bookingData: any) => {
                 </h1>
               </div>
               <p className="text-xl ml-57 text-gray-200 max-w-2xl drop-shadow-lg">
-                Discover luxury accommodations across Valparai, Solaiyur, and Kothagiri
+                Discover luxury accommodations across Valparai, Sholayar, and Kothagiri
               </p>
             </div>
           </div>

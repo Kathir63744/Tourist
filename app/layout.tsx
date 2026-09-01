@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Providers from "./components/Providers";
@@ -210,6 +211,19 @@ export default function RootLayout({
         
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-RMQEQ7KRET"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){window.dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-RMQEQ7KRET');
+          `}
+        </Script>
         
         <script
           type="application/ld+json"
@@ -217,6 +231,7 @@ export default function RootLayout({
             __html: JSON.stringify(organizationSchema),
           }}
         />
+        
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -34,16 +34,16 @@ import {
 const blogPosts = [
   {
     id: 1,
-    title: "Valparai-Solaiyur: Complete Travel Guide",
-    excerpt: "Everything you need to know about visiting Valparai and Solaiyur - from best stays to hidden waterfalls.",
+    title: "Valparai-Sholayar: Complete Travel Guide",
+    excerpt: "Everything you need to know about visiting Valparai and Sholayar - from best stays to hidden waterfalls.",
     content: "Full article content here...",
     author: "Travel Expert",
     date: "Jan 15, 2024",
     readTime: "8 min read",
     category: "Travel Guide",
-    location: "Valparai-Solaiyur",
+    location: "Valparai-Sholayar",
     image: "/blog1.jpg", // Make sure this file exists in your public folder
-    tags: ["Valparai", "Solaiyur", "Waterfalls", "Nature"],
+    tags: ["Valparai", "Sholayar", "Waterfalls", "Nature"],
     icon: <Home className="w-5 h-5" />,
     color: "emerald"
   },
@@ -79,7 +79,7 @@ const blogPosts = [
   },
   {
     id: 4,
-    title: "Valparai-Solaiyur Home-Style Dining",
+    title: "Valparai-Sholayar Home-Style Dining",
     excerpt: "Discover delicious home-style meals delivered to your room - traditional flavors with modern comfort.",
     content: "Full article content here...",
     author: "Food Blogger",
@@ -125,7 +125,7 @@ const blogPosts = [
 ];
 
 const categories = ["All", "Travel Guide", "Experience", "Food & Dining", "Family Travel", "Adventure", "Photography", "Travel Tips"];
-const locations = ["All", "Valparai-Solaiyur", "Kothagiri", "Both Locations"];
+const locations = ["All", "Valparai-Sholayar", "Kothagiri", "Both Locations"];
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -244,7 +244,7 @@ export default function BlogPage() {
                 </h1>
               </div>
               <p className="text-xl text-gray-200 max-w-2xl mx-auto drop-shadow-lg">
-                Insights, tips, and stories from Valparai-Solaiyur & Kothagiri hill stations
+                Insights, tips, and stories from Valparai-Sholayar & Kothagiri hill stations
               </p>
             </div>
           </div>
@@ -281,7 +281,7 @@ export default function BlogPage() {
                       </p>
                       <div className="flex justify-center gap-4 mb-8">
                         <span className="px-4 py-2 bg-emerald-100/20 backdrop-blur-sm text-emerald-300 text-sm font-medium rounded-full border border-emerald-500/30">
-                          Valparai-Solaiyur
+                          Valparai-Sholayar
                         </span>
                         <span className="px-4 py-2 bg-orange-100/20 backdrop-blur-sm text-orange-300 text-sm font-medium rounded-full border border-orange-500/30">
                           Kothagiri

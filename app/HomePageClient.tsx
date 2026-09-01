@@ -1132,9 +1132,9 @@ const handleBookNow = async (room: RoomDetails) => {
     <div className="grid md:grid-cols-3 gap-6 mb-10">
       {[
         {
-          title: "Valparai-Solaiyur Travel Guide",
+          title: "Valparai-Sholayar Travel Guide",
           description: "Everything about visiting Valparai and Solaiyur - stays, waterfalls, and local experiences",
-          location: "Valparai-Solaiyur",
+          location: "Valparai-Sholayar",
           color: "emerald",
           date: "Jan 15, 2024"
         },

@@ -25,7 +25,7 @@ interface LocationData {
 
 const locations: Record<'valparai' | 'kothagiri', LocationData> = {
   valparai: {
-    name: 'Valparai-Solaiyur',
+    name: 'Valparai-Sholayar',
     tagline: 'The Scotland of South India',
     description: 'Nestled in the Anamalai Hills, Valparai is known for its sprawling tea estates, misty mountains, and rich biodiversity. Experience the perfect blend of nature and luxury.',
     highlights: ['Tea Plantations', 'Sholayar Dam', 'Anamalai Tiger Reserve', 'Waterfalls', 'Wildlife Safari'],
