@@ -56,7 +56,7 @@ const PARTNER = {
   tagline: "Discover the Beauty of the Western Ghats",
   subline:
     "Explore Ooty, Valparai & Athirappilly with Comfort, Safety & Great Hospitality",
-  phone: "+91 90000 00000", // TODO: real number
+  phone: "+91 98765 43210", // TODO: real number
   email: "bookings@valparaihelpline.com", // TODO: real address
 };
 
