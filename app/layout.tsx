@@ -109,7 +109,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     images: [
       {
-        url: "/valparai_logo_3.png", // ✅ Now using same image for both
+        url: "/valparai_logo_3.png",
         width: 1200,
         height: 630,
         alt: "Zoy Tours - Premium Hill Station Resorts",
@@ -124,7 +124,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE_NAME} - Premium Hill Station Resorts`,
     description: "Experience curated resorts across Valparai, Solaiyur, and Kothagiri.",
-    images: ["/valparai_logo_3.png"], // ✅ Now using same image as Open Graph
+    images: ["/valparai_logo_3.png"],
   },
   
   icons: {
@@ -148,6 +148,7 @@ export const metadata: Metadata = {
   },
   
   alternates: {
+    // ✅ Homepage canonical - this is correct
     canonical: SITE_URL,
   },
   
@@ -156,7 +157,7 @@ export const metadata: Metadata = {
   },
 };
 
-// Organization Schema
+// ✅ Enhanced Organization Schema
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "TravelAgency",
@@ -177,6 +178,11 @@ const organizationSchema = {
     addressCountry: "IN",
   },
   priceRange: "₹2,000 - ₹15,000",
+  sameAs: [
+    "https://www.facebook.com/zoytours",
+    "https://www.instagram.com/zoytours",
+    "https://www.youtube.com/zoytours",
+  ],
 };
 
 export default function RootLayout({
@@ -190,10 +196,12 @@ export default function RootLayout({
       className={`${thunder.variable} ${migra.variable} ${monument.variable} ${chillout.variable} ${chrono.variable}`}
     >
       <head>
+        {/* ✅ Favicon with proper attributes */}
         <link 
           rel="icon" 
           href="/zoy_tours_whatsapp_dp.png" 
           type="image/png"
+          sizes="any"
         />
         <link 
           rel="shortcut icon" 
@@ -209,9 +217,11 @@ export default function RootLayout({
           href="/zoy_tours_whatsapp_dp.png"
         />
         
+        {/* ✅ Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
+        {/* ✅ Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-RMQEQ7KRET"
           strategy="afterInteractive"
@@ -225,6 +235,7 @@ export default function RootLayout({
           `}
         </Script>
         
+        {/* ✅ Organization Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

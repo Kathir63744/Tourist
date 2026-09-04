@@ -1,9 +1,13 @@
 // app/destinations/page.tsx
 import type { Metadata } from 'next';
 import DestinationsClient from './DestinationsClient';
+import { generateCanonical } from '../lib/canonical';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zoytours.com';
+const SITE_NAME = 'Zoy Tours';
 
 export const metadata: Metadata = {
-  title: 'Hill Station Destinations - Valparai, Solaiyur & Kothagiri | HillEscape',
+  title: 'Hill Station Destinations - Valparai, Solaiyur & Kothagiri | Zoy Tours',
   description: 'Explore Valparai, Solaiyur & Kothagiri - three beautiful hill stations in Tamil Nadu\'s Western Ghats. Discover tea plantations, waterfalls, wildlife sanctuaries, and colonial heritage.',
   keywords: [
     'Valparai hill station',
@@ -22,17 +26,20 @@ export const metadata: Metadata = {
     'Anaimalai Hills',
     'Nilgiri hills',
   ].join(', '),
+  alternates: {
+    canonical: generateCanonical('/destinations'), // ✅ Fixed: using helper function
+  },
   openGraph: {
-    title: 'Hill Station Destinations - Valparai, Solaiyur & Kothagiri',
+    title: 'Hill Station Destinations - Valparai, Solaiyur & Kothagiri | Zoy Tours',
     description: 'Discover the beauty of Tamil Nadu\'s hill stations. Plan your perfect getaway to Valparai, Solaiyur & Kothagiri.',
-    url: '/destinations',
-    siteName: 'HillEscape',
+    url: generateCanonical('/destinations'), // ✅ Added full URL
+    siteName: SITE_NAME,
     images: [
       {
         url: '/og-destinations.jpg',
         width: 1200,
         height: 630,
-        alt: 'HillEscape Destinations - Valparai, Solaiyur & Kothagiri',
+        alt: 'Zoy Tours Destinations - Valparai, Solaiyur & Kothagiri',
         type: 'image/jpeg',
       },
     ],
@@ -44,11 +51,19 @@ export const metadata: Metadata = {
     title: 'Hill Station Destinations - Valparai, Solaiyur & Kothagiri',
     description: 'Discover the beauty of Tamil Nadu\'s hill stations. Plan your perfect getaway today.',
     images: ['/og-destinations.jpg'],
-    site: '@hillescape',
-    creator: '@hillescape',
+    site: '@zoytours',
+    creator: '@zoytours',
   },
-  alternates: {
-    canonical: '/destinations',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
@@ -57,7 +72,7 @@ const destinationsSchema = {
   '@type': 'CollectionPage',
   name: 'Hill Station Destinations - Valparai, Solaiyur & Kothagiri',
   description: 'Explore three beautiful hill stations in Tamil Nadu\'s Western Ghats - Valparai, Solaiyur & Kothagiri.',
-  url: 'https://hillescape.com/destinations',
+  url: generateCanonical('/destinations'), // ✅ Using helper
   breadcrumb: {
     '@type': 'BreadcrumbList',
     itemListElement: [
@@ -65,13 +80,13 @@ const destinationsSchema = {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://hillescape.com',
+        item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Destinations',
-        item: 'https://hillescape.com/destinations',
+        item: generateCanonical('/destinations'), // ✅ Using helper
       },
     ],
   },
@@ -83,21 +98,21 @@ const destinationsSchema = {
         position: 1,
         name: 'Valparai',
         description: 'A breathtaking hill station in the Anaimalai Hills with tea estates and wildlife.',
-        url: 'https://hillescape.com/destinations/valparai',
+        url: generateCanonical('/destinations/valparai'), // ✅ Using helper
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Solaiyur',
         description: 'A hidden gem nestled in dense forests offering pristine nature experiences.',
-        url: 'https://hillescape.com/destinations/solaiyur',
+        url: generateCanonical('/destinations/solaiyur'), // ✅ Using helper
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'Kothagiri',
         description: 'A colonial hill station in the Nilgiris with panoramic views and pleasant climate.',
-        url: 'https://hillescape.com/destinations/kothagiri',
+        url: generateCanonical('/destinations/kothagiri'), // ✅ Using helper
       },
     ],
   },

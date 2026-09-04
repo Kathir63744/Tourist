@@ -21,7 +21,7 @@ import {
 export default function ContactPage() {
   const phoneNumber = "+919876543210";
   const whatsappNumber = "+919876543210";
-  const email = "support@hillescape.com";
+  const email = "paradise@hilltopvalparai.in";
 
   const locationMaps = [
     {
@@ -252,8 +252,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <h4 className="font-bold text-white mb-1">Phone Numbers</h4>
-                        <p className="text-white/70">General: +91 98765 43210</p>
-                        <p className="text-white/70">Emergency: +91 98765 43211</p>
+                        <p className="text-white/70">General: +91 9380347131</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">
@@ -262,8 +261,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <h4 className="font-bold text-white mb-1">Email Address</h4>
-                        <p className="text-white/70">support@hillescape.com</p>
-                        <p className="text-white/70">bookings@hillescape.com</p>
+                        <p className="text-white/70">paradise@hilltopvalparai.in</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-4">

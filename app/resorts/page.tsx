@@ -1,9 +1,13 @@
 // app/resorts/page.tsx
 import type { Metadata } from 'next';
 import ResortsClient from './ResortsClient';
+import { generateCanonical } from '../lib/canonical';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zoytours.com';
+const SITE_NAME = 'Zoy Tours';
 
 export const metadata: Metadata = {
-  title: 'Premium Resorts in Valparai & Kothagiri - Book Luxury Hill Station Stays | HillEscape',
+  title: 'Premium Resorts in Valparai & Kothagiri - Book Luxury Hill Station Stays | Zoy Tours',
   description: 'Browse and book premium hill station resorts in Valparai, Solaiyur & Kothagiri. Compare room types, amenities, prices, and read guest reviews. Your perfect mountain getaway awaits.',
   keywords: [
     'resorts in Valparai',
@@ -24,17 +28,20 @@ export const metadata: Metadata = {
     'resorts with balcony',
     'Valparai Solaiyur resorts',
   ].join(', '),
+  alternates: {
+    canonical: generateCanonical('/resorts'), // ✅ Fixed: using helper function
+  },
   openGraph: {
     title: 'Premium Resorts in Valparai & Kothagiri - Book Luxury Stays',
     description: 'Browse our premium hill station resorts. Compare room types, amenities, and prices. Book your luxury stay today!',
-    url: '/resorts',
-    siteName: 'HillEscape',
+    url: generateCanonical('/resorts'), // ✅ Added full URL
+    siteName: SITE_NAME,
     images: [
       {
         url: '/og-resorts.jpg',
         width: 1200,
         height: 630,
-        alt: 'HillEscape Premium Resorts in Valparai & Kothagiri',
+        alt: 'Zoy Tours Premium Resorts in Valparai & Kothagiri',
         type: 'image/jpeg',
       },
     ],
@@ -46,11 +53,8 @@ export const metadata: Metadata = {
     title: 'Premium Resorts in Valparai & Kothagiri',
     description: 'Browse and book luxury hill station resorts. Find the perfect stay for your mountain getaway.',
     images: ['/og-resorts.jpg'],
-    site: '@hillescape',
-    creator: '@hillescape',
-  },
-  alternates: {
-    canonical: '/resorts',
+    site: '@zoytours',
+    creator: '@zoytours',
   },
 };
 
@@ -63,13 +67,13 @@ const breadcrumbSchema = {
       '@type': 'ListItem',
       position: 1,
       name: 'Home',
-      item: 'https://hillescape.com',
+      item: SITE_URL,
     },
     {
       '@type': 'ListItem',
       position: 2,
       name: 'Resorts',
-      item: 'https://hillescape.com/resorts',
+      item: generateCanonical('/resorts'), // ✅ Using full URL
     },
   ],
 };

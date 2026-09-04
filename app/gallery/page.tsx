@@ -1,9 +1,13 @@
 // app/gallery/page.tsx
 import type { Metadata } from 'next';
 import GalleryClient from './GalleryClient';
+import { generateCanonical } from '../lib/canonical';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://zoytours.com';
+const SITE_NAME = 'Zoy Tours';
 
 export const metadata: Metadata = {
-  title: 'Gallery - HillEscape Resorts & Scenic Hill Station Views | Valparai & Kothagiri',
+  title: 'Gallery - Zoy Tours Resorts & Scenic Hill Station Views | Valparai & Kothagiri',
   description: 'Explore our photo gallery of premium resorts, mountain views, tea plantations, waterfalls, and breathtaking landscapes in Valparai & Kothagiri. See the beauty of Tamil Nadu\'s Western Ghats.',
   keywords: [
     'resort gallery',
@@ -24,17 +28,20 @@ export const metadata: Metadata = {
     'nature photography',
     'travel photography',
   ].join(', '),
+  alternates: {
+    canonical: generateCanonical('/gallery'), // ✅ Fixed: using helper function
+  },
   openGraph: {
-    title: 'Gallery - HillEscape Resorts & Scenic Hill Station Views',
+    title: 'Gallery - Zoy Tours Resorts & Scenic Hill Station Views',
     description: 'See the beauty of our resorts and the stunning hill station landscapes of Valparai & Kothagiri. Explore our photo gallery.',
-    url: '/gallery',
-    siteName: 'HillEscape',
+    url: generateCanonical('/gallery'), // ✅ Added full URL
+    siteName: SITE_NAME,
     images: [
       {
         url: '/og-gallery.jpg',
         width: 1200,
         height: 630,
-        alt: 'HillEscape Gallery - Resorts & Scenic Views in Valparai & Kothagiri',
+        alt: 'Zoy Tours Gallery - Resorts & Scenic Views in Valparai & Kothagiri',
         type: 'image/jpeg',
       },
     ],
@@ -43,14 +50,22 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Gallery - HillEscape Resorts & Scenic Views',
+    title: 'Gallery - Zoy Tours Resorts & Scenic Views',
     description: 'Explore our photo gallery of premium resorts and breathtaking hill station landscapes.',
     images: ['/og-gallery.jpg'],
-    site: '@hillescape',
-    creator: '@hillescape',
+    site: '@zoytours',
+    creator: '@zoytours',
   },
-  alternates: {
-    canonical: '/gallery',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
@@ -58,9 +73,9 @@ export const metadata: Metadata = {
 const gallerySchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'HillEscape Gallery - Resorts & Hill Station Views',
+  name: 'Zoy Tours Gallery - Resorts & Hill Station Views',
   description: 'Photo gallery of premium hill station resorts, mountain views, tea plantations, and waterfalls in Valparai & Kothagiri.',
-  url: 'https://hillescape.com/gallery',
+  url: generateCanonical('/gallery'), // ✅ Using helper
   breadcrumb: {
     '@type': 'BreadcrumbList',
     itemListElement: [
@@ -68,19 +83,19 @@ const gallerySchema = {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://hillescape.com',
+        item: SITE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Gallery',
-        item: 'https://hillescape.com/gallery',
+        item: generateCanonical('/gallery'), // ✅ Using helper
       },
     ],
   },
   mainEntity: {
     '@type': 'ImageGallery',
-    name: 'HillEscape Resort Gallery',
+    name: 'Zoy Tours Resort Gallery',
     description: 'Stunning images of hill station resorts and landscapes',
   },
 };
