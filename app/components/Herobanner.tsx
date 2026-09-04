@@ -9,7 +9,7 @@ export default function Herobanner() {
       <div className="absolute inset-0 h-full w-full">
         <video
           className="h-full w-full object-cover"
-          src="/video.mp4"
+          src="/bg-video.mp4"
           autoPlay
           muted
           loop
