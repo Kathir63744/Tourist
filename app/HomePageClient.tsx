@@ -1208,7 +1208,7 @@ const handleBookNow = async (room: RoomDetails) => {
 
 
 
-{/* Footer */}
+        {/* Footer */}
 <footer className="py-12 border-t border-white/10">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
@@ -1221,9 +1221,9 @@ const handleBookNow = async (room: RoomDetails) => {
       </div>
       
       <div className="flex items-center gap-6">
-        <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Privacy Policy</a>
-        <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Terms of Service</a>
-        <a href="#" className="text-white/70 hover:text-white transition-colors text-sm">Contact Us</a>
+        <a href="/privacy-policy" className="text-white/70 hover:text-white transition-colors text-sm">Privacy Policy</a>
+        <a href="/terms-of-service" className="text-white/70 hover:text-white transition-colors text-sm">Terms of Service</a>
+        <a href="/contact" className="text-white/70 hover:text-white transition-colors text-sm">Contact Us</a>
       </div>
       
       <div className="text-white/70 text-sm">

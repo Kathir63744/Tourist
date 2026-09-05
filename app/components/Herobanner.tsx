@@ -29,7 +29,7 @@ export default function Herobanner() {
         
         {/* Gradient overlay for better text readability */}
         <div 
-          className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/30"
+          className="absolute inset-0 bg-linear-to-b from-black/40 via-transparent to-black/30"
           aria-hidden="true"
         />
       </div>
