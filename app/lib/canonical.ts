@@ -1,5 +1,5 @@
 // app/lib/canonical.ts
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://zoytours.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.zoytours.com";
 
 export function generateCanonical(path: string) {
   // Remove trailing slash except for homepage
