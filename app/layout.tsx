@@ -147,10 +147,8 @@ export const metadata: Metadata = {
     ],
   },
   
-  alternates: {
-    // ✅ Homepage canonical - this is correct
-    canonical: SITE_URL,
-  },
+  // ❌ REMOVED canonical from here - it will be set per page
+  // This prevents all pages from pointing to the homepage canonical
   
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "",
