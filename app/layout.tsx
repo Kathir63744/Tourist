@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     "Experience curated resorts across Valparai, Solaiyur, and Kothagiri. Book premium hill station stays, explore tea plantations, waterfalls, and wildlife in Tamil Nadu's Western Ghats.",
   
   keywords: [
-    "Zoy Tours",
+    "www.zoytours.com",
     "Valparai resorts",
     "Kothagiri resorts",
     "Solaiyur hill station",
