@@ -47,7 +47,7 @@ const migra = localFont({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://zoytours.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.zoytours.com";
 const SITE_NAME = "Zoy Tours";
 
 export const viewport: Viewport = {

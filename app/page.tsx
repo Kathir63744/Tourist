@@ -11,7 +11,7 @@ export const metadata = {
   openGraph: {
     title: 'Zoy Tours - Premium Hill Station Resorts',
     description: 'Book luxury hill station resorts in Valparai & Kothagiri. Best price guaranteed.',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://zoytours.com', // ✅ Added OG URL
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zoytours.com', // ✅ Added OG URL
     images: [{ url: '/og-home.jpg', width: 1200, height: 630, alt: 'Zoy Tours Resorts' }],
   },
   twitter: {
