@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { getServerSideSitemap } from 'next-sitemap'
+
 
 // If you have dynamic routes, fetch them from your CMS/API
 async function getDynamicRoutes() {
