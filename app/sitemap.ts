@@ -1,59 +1,22 @@
+// app/sitemap.ts
 import { MetadataRoute } from 'next'
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zoytours.com'
 
-// If you have dynamic routes, fetch them from your CMS/API
-async function getDynamicRoutes() {
-  // Example: Fetch from your database or CMS
-  // const posts = await fetch('https://api.yourcms.com/posts').then(res => res.json())
-  // return posts.map((post: any) => ({
-  //   url: `https://your-domain.com/blog/${post.slug}`,
-  //   lastModified: new Date(post.updatedAt),
-  //   changeFrequency: 'weekly' as const,
-  //   priority: 0.8,
-  // }))
-  
-  // Example static routes
+export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date()
+
   return [
-    {
-      url: 'https://www.zoytours.com/about',
-      lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.8,
-    },
-    {
-      url: 'https://www.zoytours.com/contact',
-      lastModified: new Date(),
-      changeFrequency: 'yearly' as const,
-      priority: 0.6,
-    },
+    { url: `${SITE_URL}/`, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${SITE_URL}/tours`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${SITE_URL}/resorts`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${SITE_URL}/packages`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${SITE_URL}/destinations`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${SITE_URL}/gallery`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${SITE_URL}/valparai-group-tours`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${SITE_URL}/privacy-policy`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${SITE_URL}/terms-of-service`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
   ]
-}
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Base routes
-  const baseRoutes: MetadataRoute.Sitemap = [
-    {
-      url: 'https://www.zoytours.com',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 1,
-    },
-    {
-      url: 'https://www.zoytours.com/blog',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: 'https://www.zoytours.com/products',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-  ]
-
-  // Get dynamic routes
-  const dynamicRoutes = await getDynamicRoutes()
-
-  return [...baseRoutes, ...dynamicRoutes]
 }
