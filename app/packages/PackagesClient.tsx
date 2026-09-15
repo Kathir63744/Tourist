@@ -53,11 +53,11 @@ interface Quote {
 
 const PARTNER = {
   name: "Zoy Tours",
-  tagline: "Discover the Beauty of the Western Ghats",
+  tagline: "Explore Ooty, Valaparai & Athirappilly Tour Packages",
   subline:
-    "Explore Ooty, Valparai & Athirappilly with Comfort, Safety & Great Hospitality",
-  phone: "+91 98765 43210", // TODO: real number
-  email: "bookings@valparaihelpline.com", // TODO: real address
+    "Curated hill station holidays with comfortable stays, private transport, sightseeing & guided experiences.",
+  phone: "+91 98765 43210", 
+  email: "bookings@valparaihelpline.com", 
 };
 
 const PACKAGES: TourPackage[] = [
